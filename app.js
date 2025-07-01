@@ -1,3 +1,3 @@
+import {start} from "./menu.js"
 
-
-const path = "DB/db.txt"
+start();

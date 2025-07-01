@@ -1,1 +1,3 @@
-import readline from "readline-sync";
+
+
+const path = "DB/db.txt"

@@ -1,17 +1,105 @@
 import fs from "fs";
+import readline, { question } from "readline-sync";
 
-
-
-const read = function(path){
-    fs.readFile(path,"utf-8", (err, data) => {
+const create = function (path, str) {
+    fs.readFile(path, "utf-8", (err, data) => {
         if (err) {
             console.log(err);
             return;
         }
-        console.log(data);
+        const arrData = JSON.parse(data);
+        if (arrData.includes(str)) {
+            console.log("Data already exists");
+            return;
+        }
+        arrData.push(str);
+        const newData = JSON.stringify(arrData);
+
+        fs.writeFile(path, newData, (err) => {
+            if (err) {
+                console.log(err);
+                return;
+            }
+            console.log(`Data added successfully`);
+        });
+    });
+};
+
+const read = function (path) {
+    fs.readFile(path, "utf-8", (err, data) => {
+        if (err) {
+            console.log(err);
+            return;
+        }
+        console.log(JSON.parse(data));
     });
 }
 
-const create = function(userName){
-    
+const update = function (path, exsitsStr, upStr) {
+    fs.readFile(path, "utf-8", (err, data) => {
+        if (err) {
+            console.log(err);
+            return;
+        }
+
+        const arrData = JSON.parse(data);
+        if (!arrData.includes(exsitsStr)) {
+            console.log(`The <${exsitsStr}> not exsits in the file`);
+            return;
+        }
+
+        const newData = JSON.stringify(
+            arrData.map(str => {
+                if (str === exsitsStr) {
+                    return upStr;
+                } else return str;
+            })
+        );
+
+        fs.writeFile(path, newData, (err) => {
+            if (err) {
+                console.log(err);
+                return;
+            }
+            console.log(`Data update successfully: (${exsitsStr} with ${upStr})`);
+        })
+    });
+}
+
+const deleteStr = function (path, deStr) {
+    fs.readFile(path, "utf-8", (err, data) => {
+        if (err) {
+            console.log(err);
+            return;
+        }
+
+        const arrData = JSON.parse(data);
+        if (!arrData.includes(deStr)) {
+            console.log(`The <${deStr}> not exsits in the file`);
+            return;
+        }
+
+        const newData = JSON.stringify(
+            arrData.filter(str => {
+                if (str === deStr) {
+                    return undefined;
+                }else{
+                    return str;
+                }
+            })
+        );
+
+        fs.writeFile(path, newData, (err) => {
+            if (err) {
+                console.log(err);
+                console.log("Data update successfully");
+                return;
+            }
+        })
+    });
+}
+
+const getUserName = function(){
+    const userName = question("Enter your user name>");
+    return userName;
 }

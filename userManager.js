@@ -9,6 +9,9 @@ const read = function(path){
             return;
         }
         console.log(data);
-    })
+    });
 }
 
+const create = function(userName){
+    
+}

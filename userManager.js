@@ -1,5 +1,5 @@
 import fs from "fs";
-import { json } from "stream/consumers";
+import readline, { question } from "readline-sync";
 
 const create = function (path, str) {
     fs.readFile(path, "utf-8", (err, data) => {
@@ -8,6 +8,10 @@ const create = function (path, str) {
             return;
         }
         const arrData = JSON.parse(data);
+        if (arrData.includes(str)) {
+            console.log("Data already exists");
+            return;
+        }
         arrData.push(str);
         const newData = JSON.stringify(arrData);
 
@@ -20,7 +24,6 @@ const create = function (path, str) {
         });
     });
 };
-
 
 const read = function (path) {
     fs.readFile(path, "utf-8", (err, data) => {
@@ -48,7 +51,6 @@ const update = function (path, exsitsStr, upStr) {
         const newData = JSON.stringify(
             arrData.map(str => {
                 if (str === exsitsStr) {
-                    console.log(str);
                     return upStr;
                 } else return str;
             })
@@ -77,13 +79,27 @@ const deleteStr = function (path, deStr) {
             return;
         }
 
+        const newData = JSON.stringify(
+            arrData.filter(str => {
+                if (str === deStr) {
+                    return undefined;
+                }else{
+                    return str;
+                }
+            })
+        );
+
+        fs.writeFile(path, newData, (err) => {
+            if (err) {
+                console.log(err);
+                console.log("Data update successfully");
+                return;
+            }
+        })
     });
 }
 
-const path = "DB/db.txt"
-// create(path, "yona");
-// update(path, "tami", "noam");
-setTimeout(() => {
-    read("DB/db.txt")
-}, 2000)
-
+const getUserName = function(){
+    const userName = question("Enter your user name>");
+    return userName;
+}

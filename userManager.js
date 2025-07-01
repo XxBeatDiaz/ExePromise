@@ -1,5 +1,5 @@
 import fs from "fs";
-import readline, { question } from "readline-sync";
+import { question } from "readline-sync";
 
 const create = function (path, str) {
     fs.readFile(path, "utf-8", (err, data) => {
@@ -23,9 +23,10 @@ const create = function (path, str) {
             console.log(`Data added successfully`);
         });
     });
-};
+}
 
 const read = function (path) {
+    
     fs.readFile(path, "utf-8", (err, data) => {
         if (err) {
             console.log(err);
@@ -88,18 +89,25 @@ const deleteStr = function (path, deStr) {
                 }
             })
         );
-
+        
         fs.writeFile(path, newData, (err) => {
             if (err) {
                 console.log(err);
-                console.log("Data update successfully");
                 return;
             }
+            console.log("Data deleted successfully");
         })
     });
 }
 
 const getUserName = function(){
-    const userName = question("Enter your user name>");
-    return userName;
+    const userName = question("Enter your user name> ");
+    return userName.trim();
 }
+
+const getExsitsUserName = function(){
+    const exsitsUserName = question("Enter exsits user name> ");
+    return exsitsUserName.trim();
+}
+
+export{create, read, update, deleteStr, getUserName, getExsitsUserName}
